@@ -48,8 +48,8 @@ app.get("/timestamp/api/:date?", function (req, res) {
 });
 
 // header parser project
-app.get("/whoami", function (req, res) {
-  res.sendFile(__dirname + '/views/whoami.html');
+app.get("/headerparser", function (req, res) {
+  res.sendFile(__dirname + '/views/headerparser.html');
 });
 
 app.get("/api/whoami", function (req, res) {
