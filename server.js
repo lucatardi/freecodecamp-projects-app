@@ -19,10 +19,12 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+
+// timestamp project
+
 app.get("/timestamp", function (req, res) {
   res.sendFile(__dirname + '/views/timestamp.html');
 });
-
 
 app.get("/timestamp/api/:date?", function (req, res) {
   const inputDate = req.params.date;
@@ -43,6 +45,20 @@ app.get("/timestamp/api/:date?", function (req, res) {
       res.json({ error : 'Invalid Date' });
     }
   }
+});
+
+// header parser project
+app.get("/whoami", function (req, res) {
+  res.sendFile(__dirname + '/views/whoami.html');
+});
+
+app.get("/api/whoami", function (req, res) {
+  const info = {
+    ipaddress: req.headers['x-forwarded-for'],
+    language: req.headers['accept-language'],
+    software: req.headers['user-agent']
+  }
+  res.json(info);
 });
 
 
