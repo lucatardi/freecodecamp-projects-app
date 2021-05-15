@@ -52,7 +52,7 @@ app.get("/headerparser", function (req, res) {
   res.sendFile(__dirname + '/views/headerparser.html');
 });
 
-app.get("/api/whoami", function (req, res) {
+app.get("/headerparser/api/whoami", function (req, res) {
   const info = {
     ipaddress: req.headers['x-forwarded-for'],
     language: req.headers['accept-language'],
