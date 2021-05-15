@@ -19,8 +19,12 @@ app.get("/", function (req, res) {
   res.sendFile(__dirname + '/views/index.html');
 });
 
+app.get("/timestamp", function (req, res) {
+  res.sendFile(__dirname + '/views/timestamp.html');
+});
 
-app.get("/api/timestamp/:date?", function (req, res) {
+
+app.get("/timestamp/api/:date?", function (req, res) {
   const inputDate = req.params.date;
   if (!inputDate) {
     const actualDate = new Date();
