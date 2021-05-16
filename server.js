@@ -7,7 +7,8 @@ const express = require('express'),
   mongoose = require('mongoose'),
   shortid = require('shortid'),
   bodyParser = require('body-parser'),
-  dotenv = require('dotenv');
+  dotenv = require('dotenv'),
+  validUrl = require('valid-url');
 
 // to read .env file
 dotenv.config();
@@ -93,14 +94,19 @@ new mongoose.Schema({
 }))
 
 app.post("/urlshortener/api/shorturl", async (req, res) => {
-  const suffix = shortid.generate();
-  const newUrl = new ShortUrl({
-    original_url: req.body.url,
-    short_url: suffix
-  })
+  if (validUrl.isHttpsUri(req.body.url)){
+    const suffix = shortid.generate();
+    const newUrl = new ShortUrl({
+      original_url: req.body.url,
+      short_url: suffix
+    })
 
-  const saved = await newUrl.save();
-  res.json(saved);
+    const saved = await newUrl.save();
+    res.json(saved);
+  } 
+  else {
+    res.json({ error: 'invalid url' });
+  }
 }); 
 
 app.get("/urlshortener/api/shorturl/:suffix", async (req, res) => {
