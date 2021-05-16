@@ -6,13 +6,16 @@ const express = require('express'),
   mongo = require('mongodb'),
   mongoose = require('mongoose'),
   shortid = require('shortid'),
-  bodyParser = require('body-parser');
+  bodyParser = require('body-parser'),
+  dotenv = require('dotenv');
+
+// to read .env file
+dotenv.config();
 
 var app = express();
 const PORT = process.env.PORT || 3000;
 
-const DB_URI = 'mongodb+srv://luca:luca@cluster0.51xak.mongodb.net/Cluster0?retryWrites=true&w=majority';
-mongoose.connect(DB_URI, { 
+mongoose.connect(process.env.DB_URI, { 
   useNewUrlParser: true,
   useUnifiedTopology: true
 });
@@ -86,16 +89,14 @@ app.get("/urlshortener", function (req, res) {
 const ShortUrl = mongoose.model('ShortUrl',
 new mongoose.Schema({
   original_url: String,
-  short_url: String,
-  suffix: String
+  short_url: String
 }))
 
 app.post("/urlshortener/api/shorturl", async (req, res) => {
   const suffix = shortid.generate();
   const newUrl = new ShortUrl({
     original_url: req.body.url,
-    short_url: __dirname + '/urlshortener/api/shorturl/' + suffix,
-    suffix,
+    short_url: suffix
   })
 
   const saved = await newUrl.save();
@@ -104,8 +105,7 @@ app.post("/urlshortener/api/shorturl", async (req, res) => {
 
 app.get("/urlshortener/api/shorturl/:suffix", async (req, res) => {
   const suffix = req.params.suffix;
-  const found = await ShortUrl.findOne({suffix: suffix});
-  console.log(found);
+  const found = await ShortUrl.findOne({short_url: suffix});
   found && res.redirect(found.original_url);
 });
 
